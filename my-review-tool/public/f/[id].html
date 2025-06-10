@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>フィードバック - レビュー収集ツール</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto px-4 py-8">
+        <div class="max-w-md mx-auto bg-white rounded-lg shadow-md p-6">
+            <h1 class="text-2xl font-bold text-center mb-6">フィードバック</h1>
+            <div class="space-y-4">
+                <p class="text-center text-gray-600">このレビューについて、どのように感じましたか？</p>
+                <div class="flex justify-center space-x-4">
+                    <button id="yesBtn" class="px-6 py-2 bg-green-500 text-white rounded hover:bg-green-600">
+                        はい
+                    </button>
+                    <button id="noBtn" class="px-6 py-2 bg-red-500 text-white rounded hover:bg-red-600">
+                        いいえ
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        // URLからIDを取得
+        const id = window.location.pathname.split('/').pop();
+        
+        // ボタンのイベントリスナー
+        document.getElementById('yesBtn').addEventListener('click', async () => {
+            try {
+                const response = await fetch('/api/settings', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id, action: 'yes' })
+                });
+                if (response.ok) {
+                    window.location.href = '/';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        });
+
+        document.getElementById('noBtn').addEventListener('click', async () => {
+            try {
+                const response = await fetch('/api/feedback', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id, action: 'no' })
+                });
+                if (response.ok) {
+                    window.location.href = '/';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        });
+    </script>
+</body>
+</html> 
